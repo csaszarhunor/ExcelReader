@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Scanner;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -13,7 +14,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelReader {
 
-static String filePath = "C://numbers.xlsx";
+	static String filePath = "C://numbers.xlsx";
 	
 	public static String getString(){
 		String result = "";
@@ -22,7 +23,6 @@ static String filePath = "C://numbers.xlsx";
 		try {
 			fis = new FileInputStream(myFile);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	
@@ -31,7 +31,6 @@ static String filePath = "C://numbers.xlsx";
 		try {
 			myWorkBook = new XSSFWorkbook (fis);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	   
@@ -51,24 +50,18 @@ static String filePath = "C://numbers.xlsx";
 	
 	            Cell cell = cellIterator.next();
 	
-	            switch (cell.getCellType()) {
-	            case Cell.CELL_TYPE_STRING:
-//	                System.out.print(cell.getStringCellValue() + "\t");
-	                break;
-	            case Cell.CELL_TYPE_NUMERIC:
+	            if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC){
 	                int num = (int) cell.getNumericCellValue();
 	                result += num;
-	                break;
-	            case Cell.CELL_TYPE_BOOLEAN:
-//	                System.out.print(cell.getBooleanCellValue() + "\t");
-	                break;
-	            default :
-	         
+	            }
+	            else if (cell.getCellType() == Cell.CELL_TYPE_STRING){
+	            	String string = cell.getStringCellValue();
+	            	Scanner in = new Scanner(string).useDelimiter("[^0-9]+");
+	            	int integer = in.nextInt();
+	            	result += integer;
 	            }
 	        }
-//	        System.out.println("");
 	    }
-	    
 	    return result;
 	}
 	
